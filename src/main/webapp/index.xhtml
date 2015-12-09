@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Treino</title>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <f:metadata>
+            <f:event type="preRenderComponent" listener="#{indexBean.init()}"/>
+            <f:view encoding="ISO-8859-1"/>  
+        </f:metadata>
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <!-- Custom Fonts -->
+        <link href="/resources/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    </h:head>
+    <h:body>
+        <div class="container">
+            <h:form prependId="false">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <h4>Clientes Table</h4>
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-success insert-client" data-toggle="modal" data-target="#insert-modal">
+                                    <i class="glyphicon glyphicon-pencil"/>Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>EDIT</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <h:panelGroup layout="block" class="form-group" id="cliente">
+                                    <ui:repeat value="#{indexBean.clienteList}" var="cliente" varStatus="status">
+                                        <tr>
+                                            <td id="clientId">#{cliente.id}</td>
+                                            <td id="clientName">#{cliente.name}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-warning edit-client" data-toggle="modal" data-target="#edit-modal">
+                                                    <i class="glyphicon glyphicon-pencil"/> Editar
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <h:commandLink class="btn btn-danger delete-row" value="Delete">
+                                                    <f:ajax listener="#{indexBean.deleteClientesById(cliente.id)}"/>
+                                                </h:commandLink>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                    <h:commandLink class="render-table">
+                                        <f:ajax render="cliente"/>
+                                    </h:commandLink>
+                                </h:panelGroup>
+                            </tbody>
+                        </table>
+
+                        <br/>
+                        <!-- <div class="panel-body">
+                            <h:panelGroup layout="block" class="form-group" id="cliente2">
+                                <h:dataTable value="#{indexBean.clienteList}" var="cliente" class="table table-striped"
+                                             rowClasses="employeeTableOddRow,employeeTableEvenRow">
+                                    <h:column>    				
+                                        <f:facet name="header">Id</f:facet>    				
+                                        <h:inputText value="#{cliente.id}"
+                                                     size="10" rendered="#{cliente.canedit}" />
+                                        <h:outputText value="#{cliente.id}"
+                                                      rendered="#{not cliente.canedit}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Name</f:facet>
+                                        <h:inputText value="#{cliente.name}" 
+                                                     size="20" rendered="#{cliente.canedit}" />
+                                        <h:outputText value="#{cliente.name}" 
+                                                      rendered="#{not cliente.canedit}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Edit</f:facet>
+                                        <h:commandButton value="Edit" class="btn btn-warning"
+                                                         action="#{indexBean.editarCliente}" 
+                                                         rendered="#{not cliente.canedit}">        
+                                            <f:setPropertyActionListener 
+                                                target="#{indexBean.editCliente}" value="#{cliente}" />
+                                        </h:commandButton>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Delete</f:facet>
+                                        <h:commandButton class="btn btn-danger" value="Delete">
+                                            <f:ajax listener="#{indexBean.deleteClientesById(cliente.id)}"/>
+                                        </h:commandButton>
+                                    </h:column>
+                                </h:dataTable>
+                                <h:commandLink class="renderTable">
+                                    <f:ajax render="cliente2" />
+                                </h:commandLink>
+                            </h:panelGroup>
+                        </div> 
+                        <div class="panel-footer">
+                            <h:commandButton value="Save Changes" action="#{indexBean.saveEditedCliente}" />
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="insert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <h:form prependId="false">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close"  data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="myModalLabel">Adicionar</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label for="email">Nomeio:</label>
+                            <h:inputText class="form-control" value="#{indexBean.insertCliente.name}" size="100"/>
+                        </div>
+                        <div class="modal-footer">
+                            <h:column>
+                                <f:facet name="header">Adicionar</f:facet>
+                                <h:commandButton class="btn btn-success" value="Insert">
+                                    <f:ajax listener="#{indexBean.inserirCliente()}"/>
+                                </h:commandButton>
+                            </h:column>
+                        </div>
+                    </div>
+                </h:form>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <h:form prependId="false">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close"  data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="myModalLabel">Editar</h4>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                        <input class="form-control"></input>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </h:form>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </h:body>
+    <script src="resources/lib/script/jquery.min.js"/>
+    <script src="resources/lib/script/bootstrap.min.js"/>
+    <script src="resources/common/script/index.js"/>
+</html>
