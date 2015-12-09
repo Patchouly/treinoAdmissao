@@ -58,7 +58,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <h:commandLink class="btn btn-danger delete-row" value="Delete">
+                                                <h:commandLink id="btn-delete" class="btn btn-danger btn-delete" value="Delete">
                                                     <f:ajax listener="#{indexBean.deleteClientesById(cliente.id)}"/>
                                                 </h:commandLink>
                                             </td>
@@ -159,6 +159,8 @@
                             <h4 class="modal-title" id="myModalLabel">Editar</h4>
                         </div>
                         <div class="modal-body">
+                            <label for="email">Nome</label>
+                            <h:inputText class="form-control edit-name" value="#{indexBean.insertCliente.name}" size="100"/>
                         </div>
                         <input class="form-control"></input>
                         <div class="modal-footer">
